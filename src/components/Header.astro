@@ -1,0 +1,110 @@
+---
+---
+
+<header class="main-header">
+  <div class="header-container">
+    <a href="/" class="logo">M&V</a>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/tucuman">Tucumán</a></li>
+        <li><a href="/detalles">Evento</a></li>
+        <li><a href="/rsvp" class="rsvp-btn">Confirmar Asistencia</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .main-header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease;
+  }
+
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    height: 80px;
+  }
+
+  .logo {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    text-decoration: none;
+    font-family: "Playfair Display", serif, system-ui;
+    letter-spacing: 1px;
+  }
+
+  .nav-menu ul {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+
+  .nav-menu li a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    font-size: 1rem;
+    font-family: "Inter", system-ui, sans-serif;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+
+  .nav-menu li a:not(.rsvp-btn)::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #d4af37;
+    transition: width 0.3s ease;
+  }
+
+  .nav-menu li a:not(.rsvp-btn):hover::after {
+    width: 100%;
+  }
+
+  .nav-menu li a:hover {
+    color: #111;
+  }
+
+  .rsvp-btn {
+    background-color: #d4af37;
+    color: #fff !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease !important;
+  }
+
+  .rsvp-btn:hover {
+    background-color: #c4a132;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    .nav-menu {
+      display: none;
+    }
+  }
+</style>
