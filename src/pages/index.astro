@@ -1,20 +1,24 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import bgImage from '../assets/background2.png';
-import kiwiImage from '../assets/kiwi.png';
-import miliVicImage from '../assets/milivic.png';
+import Layout from "../layouts/Layout.astro";
+import bgImage from "../assets/background2.png";
+import kiwiImage from "../assets/kiwi.png";
+import miliVicImage from "../assets/milivic.png";
 ---
 
 <Layout>
   <main class="hero-section">
     <img src={bgImage.src} alt="Background" class="bg-image" />
-    
+
     <div class="content-overlay">
       <h1 class="hero-text">Mili y Vic se casan</h1>
-      <p class="subtitle">¡Acompáñanos en nuestro día especial!</p>
-      
+      <p class="subtitle">27/3/27 ¡Acompáñanos en nuestro día especial!</p>
+
       <div class="image-gallery">
-        <img src={miliVicImage.src} alt="Mili y Vic" class="floating-img img-1" />
+        <img
+          src={miliVicImage.src}
+          alt="Mili y Vic"
+          class="floating-img img-1"
+        />
         <img src={kiwiImage.src} alt="Kiwi" class="floating-img img-2" />
       </div>
     </div>
@@ -31,7 +35,7 @@ import miliVicImage from '../assets/milivic.png';
     justify-content: center;
     overflow: hidden;
   }
-  
+
   .bg-image {
     position: absolute;
     top: 0;
@@ -55,7 +59,7 @@ import miliVicImage from '../assets/milivic.png';
 
   .hero-text {
     font-size: 5rem;
-    font-family: 'Playfair Display', serif, system-ui;
+    font-family: "Playfair Display", serif, system-ui;
     margin-bottom: 0.5rem;
     text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
     animation: fadeInDown 1s ease-out;
@@ -76,63 +80,98 @@ import miliVicImage from '../assets/milivic.png';
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 3rem;
   }
 
   .floating-img {
-    height: 380px;
     width: auto;
     object-fit: contain;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      box-shadow 0.4s ease;
     animation: fadeIn 1.5s ease-out 1s both;
-    cursor: pointer;
   }
 
   .img-1 {
-    transform: rotate(-5deg) translateY(10px);
+    height: 380px;
     z-index: 2;
   }
 
   .img-2 {
-    transform: rotate(8deg) translateY(-20px);
-    z-index: 1;
+    position: absolute;
+    height: 160px;
+    left: calc(50% + 120px);
+    bottom: 20px;
+    z-index: 3;
+    transform: rotate(8deg);
   }
 
   .img-1:hover {
-    transform: rotate(0deg) scale(1.08) translateY(-10px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    transform: scale(1.05) translateY(-5px);
     z-index: 10;
   }
 
   .img-2:hover {
-    transform: rotate(0deg) scale(1.08) translateY(-10px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    transform: rotate(0deg) scale(1.1) translateY(-5px);
     z-index: 10;
   }
 
   @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   @media (max-width: 768px) {
-    .hero-text { font-size: 3rem; }
-    .subtitle { font-size: 1.2rem; }
-    .image-gallery { height: auto; flex-direction: column; gap: 1rem; }
-    .floating-img { height: 280px; }
-    .img-1 { transform: rotate(-3deg); margin-bottom: 2rem; }
-    .img-2 { transform: rotate(3deg); margin-top: -10px; }
+    .hero-text {
+      font-size: 3rem;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+    }
+    .image-gallery {
+      height: auto;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .img-1 {
+      height: 280px;
+      transform: rotate(-3deg);
+      margin-bottom: 1rem;
+    }
+    .img-2 {
+      position: relative;
+      height: 120px;
+      left: auto;
+      bottom: auto;
+      transform: rotate(3deg);
+      align-self: center;
+      margin-left: 120px;
+      margin-top: -60px;
+    }
   }
 </style>

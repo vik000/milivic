@@ -1,7 +1,94 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import bgImage from "../assets/background2.png";
 ---
 
 <Layout>
-    <h1>Detalles del Evento</h1>
+    <main class="event-page">
+        <img src={bgImage.src} alt="Background" class="bg-image" />
+
+        <div class="overlay">
+            <h1>Detalles del Evento</h1>
+
+            <div class="event-card">
+                <section>
+                    <h2>Loma Escondida</h2>
+                    <p>
+                        <i>
+                            Gobernador José, C. Gdor. del Campo 900, T4107 Yerba
+                            Buena, Tucumán, Argentina
+                        </i>
+                    </p>
+                    <p><b>Sábado 27 de marzo de 2027, 18:00</b></p>
+                </section>
+
+                <section>
+                    <p>
+                        <i
+                            >pondremos la agenda aquí cuando tengamos todo listo
+                        </i>
+                    </p>
+                </section>
+            </div>
+        </div>
+    </main>
 </Layout>
+
+<style>
+    .event-page {
+        position: relative;
+        min-height: calc(100vh - 80px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bg-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -2;
+        filter: brightness(0.6);
+    }
+
+    .overlay {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 800px;
+        padding: 2rem;
+        text-align: center;
+        color: white;
+    }
+
+    h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3rem;
+        margin-bottom: 2rem;
+    }
+
+    .event-card {
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(8px);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: left;
+    }
+
+    .event-card section {
+        margin-bottom: 1.5rem;
+    }
+
+    .event-card h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.5rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .event-card p {
+        margin: 0;
+        color: #eee;
+    }
+</style>

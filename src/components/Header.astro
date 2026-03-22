@@ -7,9 +7,14 @@
     <nav class="nav-menu">
       <ul>
         <li><a href="/">Inicio</a></li>
-        <li><a href="/tucuman">Tucumán</a></li>
         <li><a href="/detalles">Evento</a></li>
-        <li><a href="/rsvp" class="rsvp-btn">Confirmar Asistencia</a></li>
+        <li><a href="/tucuman">Tucumán</a></li>
+        <li>
+          <a href="/rsvp" class="rsvp-btn">
+            <span class="desktop-label">Confirmar Asistencia</span>
+            <span class="mobile-label">Confirmar</span>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
@@ -102,9 +107,78 @@
     box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
   }
 
+  .mobile-label {
+    display: none;
+  }
+
+  .desktop-label {
+    display: inline;
+  }
+
   @media (max-width: 768px) {
+    .header-container {
+      padding: 0.75rem 1rem;
+      height: auto;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+    }
+
+    .nav-menu ul {
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-menu li a {
+      font-size: 0.95rem;
+    }
+
+    .rsvp-btn {
+      padding: 0.6rem 1rem;
+    }
+
+    .header-container {
+      max-width: 100%;
+      padding: 0.75rem 1rem;
+      height: auto;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+    }
+
     .nav-menu {
+      width: 100%;
+    }
+
+    .nav-menu ul {
+      gap: 0.75rem;
+      flex-wrap: nowrap;
+      justify-content: center;
+    }
+
+    .nav-menu li a {
+      font-size: 0.95rem;
+    }
+
+    .rsvp-btn {
+      padding: 0.55rem 0.9rem;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .desktop-label {
       display: none;
+    }
+
+    .mobile-label {
+      display: inline;
     }
   }
 </style>

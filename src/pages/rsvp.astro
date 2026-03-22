@@ -1,7 +1,164 @@
 ---
 import Layout from "../layouts/Layout.astro";
+const formId = "mojkovnr";
 ---
 
 <Layout>
-    <h1>RSVP</h1>
+    <main class="rsvp-page">
+        <section class="rsvp-card">
+            <h1>Confirmación de asistencia</h1>
+            <p class="intro">
+                Nos haría muchísima ilusión contar con vosotros. Por favor,
+                confirmad vuestra asistencia completando este formulario.
+            </p>
+
+            <form
+                action={`https://formspree.io/f/${formId}`}
+                method="POST"
+                class="rsvp-form"
+            >
+                <label>
+                    Nombre y apellidos
+                    <input type="text" name="nombre" required />
+                </label>
+
+                <label>
+                    Email (opcional)
+                    <input type="email" name="email" />
+                </label>
+
+                <label>
+                    ¿Podrás asistir?
+                    <select name="asistencia" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="sí">Sí</option>
+                        <option value="no">No</option>
+                    </select>
+                </label>
+
+                <label>
+                    Número de acompañantes
+                    <input
+                        type="number"
+                        name="acompanantes"
+                        min="0"
+                        max="10"
+                        value="0"
+                    />
+                </label>
+
+                <label>
+                    Restricciones alimentarias
+                    <textarea
+                        name="restricciones_alimentarias"
+                        rows="4"
+                        placeholder="Alergias, intolerancias o preferencias"
+                    ></textarea>
+                </label>
+
+                <label>
+                    Comentarios
+                    <textarea
+                        name="comentarios"
+                        rows="4"
+                        placeholder="Cualquier cosa que quieras contarnos"
+                    ></textarea>
+                </label>
+
+                <button type="submit">Enviar confirmación</button>
+            </form>
+        </section>
+    </main>
 </Layout>
+
+<style>
+    .rsvp-page {
+        min-height: calc(100vh - 80px);
+        padding: 3rem 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        background: #f8f6f2;
+    }
+
+    .rsvp-card {
+        width: 100%;
+        max-width: 760px;
+        background: white;
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-family: "Playfair Display", serif;
+        font-size: 3rem;
+        color: #222;
+        text-align: center;
+    }
+
+    .intro {
+        text-align: center;
+        color: #666;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+
+    .rsvp-form {
+        display: grid;
+        gap: 1.25rem;
+    }
+
+    .rsvp-form label {
+        display: grid;
+        gap: 0.5rem;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .rsvp-form input,
+    .rsvp-form select,
+    .rsvp-form textarea {
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 14px;
+        padding: 0.9rem 1rem;
+        font: inherit;
+        background: #fff;
+        color: #222;
+    }
+
+    .rsvp-form textarea {
+        resize: vertical;
+    }
+
+    .rsvp-form button {
+        margin-top: 0.5rem;
+        border: 0;
+        border-radius: 999px;
+        padding: 1rem 1.5rem;
+        font: inherit;
+        font-weight: 600;
+        background: #d4af37;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .rsvp-form button:hover {
+        background: #c4a132;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .rsvp-card {
+            padding: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+        }
+    }
+</style>
