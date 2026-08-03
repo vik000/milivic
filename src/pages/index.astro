@@ -19,7 +19,12 @@ import miliVicImage from "../assets/milivic.png";
           alt="Mili y Vic"
           class="floating-img img-1"
         />
-        <img src={kiwiImage.src} alt="Kiwi" class="floating-img img-2" />
+        <img
+          src={kiwiImage.src}
+          alt="Kiwi"
+          id="kiwi-dog"
+          class="floating-img img-2"
+        />
       </div>
     </div>
   </main>
@@ -145,6 +150,10 @@ import miliVicImage from "../assets/milivic.png";
     }
   }
 
+  #kiwi-dog {
+    cursor: pointer;
+  }
+
   @media (max-width: 768px) {
     .hero-text {
       font-size: 3rem;
@@ -175,3 +184,64 @@ import miliVicImage from "../assets/milivic.png";
     }
   }
 </style>
+
+<!-- Easter egg: click Kiwi (the dog) to drop a poop 💩 -->
+<style is:global>
+  .kiwi-poop {
+    position: fixed;
+    font-size: 2.6rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 9999;
+    transform: translate(-50%, 0);
+    animation: kiwi-poop-fall 5s ease-in forwards;
+    will-change: transform, opacity;
+  }
+
+  @keyframes kiwi-poop-fall {
+    0% {
+      transform: translate(-50%, -30px) scale(0.3) rotate(0deg);
+      opacity: 0;
+    }
+    8% {
+      transform: translate(-50%, 0) scale(1) rotate(0deg);
+      opacity: 1;
+    }
+    30% {
+      transform: translate(-50%, 170px) scale(1) rotate(18deg);
+    }
+    40% {
+      transform: translate(-50%, 130px) rotate(-8deg);
+    }
+    52% {
+      transform: translate(-50%, 170px) rotate(5deg);
+    }
+    90% {
+      transform: translate(-50%, 170px) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, 210px) rotate(0deg);
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  const kiwi = document.getElementById("kiwi-dog");
+  if (kiwi) {
+    kiwi.addEventListener("click", () => {
+      const rect = kiwi.getBoundingClientRect();
+      const poop = document.createElement("span");
+      poop.textContent = "💩";
+      poop.className = "kiwi-poop";
+      poop.setAttribute("aria-hidden", "true");
+      poop.style.left = rect.left + rect.width / 2 + "px";
+      poop.style.top = rect.bottom - 12 + "px";
+      document.body.appendChild(poop);
+      // lasts 5s (matches the animation), then disappears
+      setTimeout(() => poop.remove(), 5000);
+    });
+  }
+</script>
