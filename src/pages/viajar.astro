@@ -1,0 +1,466 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Skyscanner deep-links (route search, no fixed dates → shows the price calendar).
+// Airport codes: MAD = Madrid, ORK = Cork, TUC = Tucumán, EZE = Buenos Aires (Ezeiza).
+const skyscannerMadrid = "https://www.skyscanner.es/transporte/vuelos/mad/tuc/";
+const skyscannerCork = "https://www.skyscanner.es/transporte/vuelos/ork/tuc/";
+
+// ─── Widget de precios (Travelpayouts / Aviasales) ────────────────────────────
+// Calendario de precios de vuelos EN EUROS, actualizado en vivo en el navegador
+// de cada visitante. Código generado desde el panel de Travelpayouts
+// (marker 760046, period 2027-03-01, en torno a la fecha de la boda).
+// El widget de Cork es EXACTAMENTE el mismo cambiando solo el origen: MAD → ORK.
+function fareCalendar(origin) {
+    const src =
+        "https://tpwgt.com/content?currency=eur&campaign_id=100&promo_id=4041" +
+        "&achieve=%2345AD35&light=%23FFFFFF&dark=%23000000&color_background=%23ffffff" +
+        "&primary=%230C73FE&range=7%2C26&period=2027-03-01&only_direct=false&one_way=false" +
+        `&destination=TUC&origin=${origin}&powered_by=true&locale=es` +
+        "&searchUrl=www.aviasales.com%2Fsearch&shmarker=760046&trs=558217";
+    return `<script async src="${src}" charset="utf-8"><\/script>`;
+}
+
+const madridCalendar = fareCalendar("MAD");
+const corkCalendar = fareCalendar("ORK");
+---
+
+<Layout>
+    <main class="travel-page" id="top">
+        <div class="wrapper">
+            <header class="page-head">
+                <h1>Viajar a Tucumán</h1>
+                <p class="lead">
+                    Es un viaje largo, pero merece la pena. Aquí tenéis todo lo
+                    necesario para llegar desde Europa hasta San Miguel de
+                    Tucumán, con precios orientativos en euros y nuestras
+                    recomendaciones.
+                </p>
+            </header>
+
+            <section class="section">
+                <p>
+                    El destino es <strong>San Miguel de Tucumán</strong>, la
+                    capital de la provincia, donde están los hoteles y a unos 20
+                    minutos del lugar de la boda. Se llega al
+                    <strong>Aeropuerto Internacional Teniente Benjamín Matienzo
+                    (TUC)</strong>. Desde Europa casi siempre se vuela primero a
+                    <strong>Buenos Aires</strong> y desde allí se toma un vuelo
+                    interno a Tucumán.
+                </p>
+                <p class="tip">
+                    <strong>Venid con margen:</strong> es un viaje de unas 14
+                    horas de vuelo más conexiones, así que no planifiquéis llegar
+                    el mismo día de la boda. Lo ideal es aterrizar en Tucumán
+                    <strong>uno o dos días antes</strong>, instalaros con calma en
+                    el hotel y descansar. Más adelante os recomendaremos dónde
+                    alojaros.
+                </p>
+                <p class="tip">
+                    <strong>Ojo con los aeropuertos de Buenos Aires:</strong> los
+                    vuelos internacionales llegan a <em>Ezeiza (EZE)</em>, pero
+                    los vuelos internos a Tucumán suelen salir del
+                    <em>Aeroparque (AEP)</em>, en el centro de la ciudad. Hay que
+                    contar con un traslado de unos 45–60 minutos entre ambos.
+                </p>
+
+                <div class="subsection">
+                    <h2>🚕 Traslados en Buenos Aires</h2>
+                    <p>
+                        Para moverse entre Ezeiza, Aeroparque y el centro, hay
+                        básicamente tres opciones:
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Tienda León</strong> — la opción más cómoda y
+                            segura. Es un servicio de traslados con horarios fijos
+                            que conecta <em>EZE, AEP y el centro</em>. Se puede
+                            reservar online.
+                            <a
+                                href="https://www.tiendaleon.com"
+                                target="_blank"
+                                rel="noopener noreferrer">tiendaleon.com</a
+                            >. Precio orientativo: <strong>USD 10–15</strong> el
+                            traslado en bus.
+                        </li>
+                        <li>
+                            <strong>Apps (Uber, Cabify, DiDi)</strong> — suelen
+                            ser más baratas que el taxi de calle, con precio
+                            cerrado y sin sorpresas. Muy recomendables para
+                            turistas.
+                        </li>
+                        <li>
+                            <strong>Taxi oficial</strong> — solo los del mostrador
+                            de <em>«Taxi Ezeiza»</em> dentro del aeropuerto.
+                            Precio orientativo EZE → centro:
+                            <strong>USD 30–45</strong>; el cruce
+                            <strong>EZE → AEP</strong> es más largo,
+                            <strong>USD 35–50</strong>.
+                        </li>
+                    </ul>
+                    <p class="tip">
+                        <strong>⚠️ Cuidado con los taxis:</strong> no aceptéis
+                        nunca a quien os ofrezca viaje dentro de la terminal;
+                        usad solo el mostrador oficial o una app. Acordad el
+                        precio o aseguraos de que el taxímetro esté encendido, y
+                        pagad con tarjeta o app cuando podáis para evitar el
+                        «cambiazo» de billetes. Los precios en Argentina cambian
+                        mucho con la inflación y el tipo de cambio, así que
+                        tomadlos como referencia y confirmad al viajar.
+                    </p>
+                </div>
+
+                <div class="subsection">
+                    <h2>✈️ Desde Madrid (MAD)</h2>
+                    <p>
+                        Hay <strong>vuelos directos a Buenos Aires (Ezeiza)</strong>,
+                        de unas 13 horas, con <strong>Aerolíneas Argentinas,
+                        Iberia</strong> y <strong>Air Europa</strong>. Desde
+                        Buenos Aires, el tramo interno a Tucumán (aprox. 2 h) lo
+                        cubren <strong>Aerolíneas Argentinas, JetSmart</strong> y
+                        <strong>Flybondi</strong>.
+                    </p>
+                    <a
+                        class="fare-btn"
+                        href={skyscannerMadrid}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Buscar precios Madrid → Tucumán en Skyscanner
+                    </a>
+
+                    <div class="price-widget">
+                        {
+                            madridCalendar ? (
+                                <Fragment set:html={madridCalendar} />
+                            ) : (
+                                <p class="widget-placeholder">
+                                    📊 Aquí aparecerá el <strong>calendario de
+                                    precios en euros</strong> (Madrid → Tucumán),
+                                    actualizado en vivo, en cuanto se configure el
+                                    widget de Travelpayouts.
+                                </p>
+                            )
+                        }
+                    </div>
+
+                    <div class="recommendation">
+                        <h3>Nuestra recomendación: Aerolíneas Argentinas</h3>
+                        <p>
+                            Es la aerolínea de bandera y la que mejor conecta con
+                            Tucumán: vuela <strong>directo Madrid → Buenos
+                            Aires</strong> y además cubre el tramo interno hasta
+                            Tucumán, así que podéis reservar todo el viaje con una
+                            sola compañía y facturar el equipaje de principio a
+                            fin.
+                        </p>
+                        <a
+                            class="rec-btn"
+                            href="https://www.aerolineas.com.ar"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Ir a Aerolíneas Argentinas
+                        </a>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h2>✈️ Desde Cork (ORK)</h2>
+                    <p>
+                        Cork no tiene vuelos de larga distancia, así que hay que
+                        hacer al menos una conexión en Europa antes del salto a
+                        Argentina. Las rutas más habituales son:
+                    </p>
+                    <ul>
+                        <li>
+                            <strong>Cork → Madrid</strong> (Aer Lingus / Ryanair,
+                            según temporada) y luego el directo Madrid → Buenos
+                            Aires.
+                        </li>
+                        <li>
+                            <strong>Cork → Ámsterdam</strong> (KLM) → Buenos Aires
+                            (KLM).
+                        </li>
+                        <li>
+                            <strong>Cork → Londres Heathrow</strong> (Aer Lingus)
+                            → Buenos Aires (British Airways), o vía París /
+                            Fráncfort.
+                        </li>
+                    </ul>
+                    <p>
+                        Ya en Buenos Aires, el tramo interno a Tucumán es el
+                        mismo que desde Madrid (Aerolíneas Argentinas, JetSmart o
+                        Flybondi).
+                    </p>
+                    <a
+                        class="fare-btn"
+                        href={skyscannerCork}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Buscar precios Cork → Tucumán en Skyscanner
+                    </a>
+
+                    <div class="price-widget">
+                        {
+                            corkCalendar ? (
+                                <Fragment set:html={corkCalendar} />
+                            ) : (
+                                <p class="widget-placeholder">
+                                    📊 Aquí aparecerá el <strong>calendario de
+                                    precios en euros</strong> (Cork → Tucumán),
+                                    actualizado en vivo, en cuanto se configure el
+                                    widget de Travelpayouts.
+                                </p>
+                            )
+                        }
+                    </div>
+
+                    <div class="recommendation">
+                        <h3>Nuestra recomendación: Aerolíneas Argentinas</h3>
+                        <p>
+                            Aunque desde Cork hay que hacer una conexión en
+                            Europa, una vez en Buenos Aires es la mejor opción
+                            para el tramo interno hasta Tucumán. Si enlazáis con
+                            su vuelo directo desde Madrid, podéis llevar todo el
+                            trayecto largo y el interno con una sola compañía.
+                        </p>
+                        <a
+                            class="rec-btn"
+                            href="https://www.aerolineas.com.ar"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Ir a Aerolíneas Argentinas
+                        </a>
+                    </div>
+                </div>
+
+                <p class="note">
+                    Los precios y las compañías cambian con el tiempo; conviene
+                    confirmarlo más cerca de la fecha. Si tenéis dudas con las
+                    conexiones, escribidnos y os echamos una mano.
+                </p>
+
+                <div class="map-wrap">
+                    <iframe
+                        title="Mapa de Tucumán"
+                        src="https://www.google.com/maps?q=San+Miguel+de+Tucumán,+Argentina&output=embed"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <a href="#top" class="to-top">↑ Volver arriba</a>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .travel-page {
+        min-height: calc(100vh - 80px);
+        padding: 3rem 1.5rem;
+        display: flex;
+        justify-content: center;
+        background: #f8f6f2;
+    }
+
+    .wrapper {
+        width: 100%;
+        max-width: 900px;
+    }
+
+    /* Header */
+    .page-head h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3.5rem;
+        margin: 0 0 1rem;
+        color: #222;
+        text-align: center;
+    }
+
+    .lead {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #555;
+        text-align: center;
+        max-width: 720px;
+        margin: 0 auto 2.5rem;
+    }
+
+    /* Tarjeta principal */
+    .section {
+        background: white;
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        scroll-margin-top: 100px;
+    }
+
+    .section > p {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: #555;
+    }
+
+    .subsection {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #eee;
+    }
+
+    .subsection h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.5rem;
+        margin: 0 0 0.75rem;
+        color: #333;
+    }
+
+    .subsection p,
+    .subsection li {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: #555;
+    }
+
+    .subsection ul {
+        padding-left: 1.25rem;
+    }
+
+    .tip,
+    .note {
+        background: #faf7ee;
+        border-radius: 14px;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        line-height: 1.7;
+        color: #665c3f;
+    }
+
+    .note {
+        margin-top: 2rem;
+        font-style: italic;
+    }
+
+    /* Botón de tarifas (Skyscanner) */
+    .fare-btn {
+        display: inline-block;
+        margin-top: 0.75rem;
+        background: #d4af37;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.85rem 1.5rem;
+        border-radius: 999px;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        transition: all 0.25s ease;
+    }
+
+    .fare-btn:hover {
+        background: #c4a132;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Widget de precios */
+    .price-widget {
+        margin-top: 1.25rem;
+    }
+
+    .widget-placeholder {
+        background: #faf7ee;
+        border: 1px dashed #d4af37;
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin: 0;
+        font-size: 0.98rem;
+        line-height: 1.6;
+        color: #665c3f;
+        text-align: center;
+    }
+
+    /* Recomendación de aerolínea */
+    .recommendation {
+        margin-top: 1.5rem;
+        background: #f2f7ff;
+        border-left: 4px solid #0c73fe;
+        border-radius: 14px;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .recommendation h3 {
+        margin: 0 0 0.5rem;
+        font-family: "Playfair Display", serif;
+        font-size: 1.2rem;
+        color: #12386f;
+    }
+
+    .recommendation p {
+        margin: 0 0 1rem;
+        font-size: 1rem;
+        line-height: 1.7;
+        color: #4a5568;
+    }
+
+    .rec-btn {
+        display: inline-block;
+        background: #0c73fe;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.7rem 1.3rem;
+        border-radius: 999px;
+        box-shadow: 0 4px 15px rgba(12, 115, 254, 0.25);
+        transition: all 0.25s ease;
+    }
+
+    .rec-btn:hover {
+        background: #0a5fd0;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(12, 115, 254, 0.35);
+    }
+
+    /* Mapa */
+    .map-wrap {
+        margin-top: 2rem;
+        min-height: 420px;
+    }
+
+    .map-wrap iframe {
+        width: 100%;
+        height: 100%;
+        min-height: 420px;
+        border: 0;
+        border-radius: 18px;
+    }
+
+    /* Volver arriba */
+    .to-top {
+        display: inline-block;
+        margin-top: 2rem;
+        color: #a98d2a;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .to-top:hover {
+        color: #d4af37;
+    }
+
+    @media (max-width: 768px) {
+        .page-head h1 {
+            font-size: 2.5rem;
+        }
+
+        .section {
+            padding: 1.75rem;
+        }
+    }
+</style>

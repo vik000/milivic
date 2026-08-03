@@ -1,0 +1,158 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+    <main class="cards-page" id="top">
+        <div class="wrapper">
+            <header class="page-head">
+                <h1>Argentina</h1>
+                <p class="lead">
+                    Si venís desde tan lejos, quizá queráis aprovechar para
+                    recorrer un poco más del país. Argentina es enorme y muy
+                    variada; estas son algunas ideas, empezando por lo más
+                    cercano a Tucumán.
+                </p>
+            </header>
+
+            <div class="cards">
+                <article class="place">
+                    <h2>Salta y Jujuy · el Norte</h2>
+                    <p>
+                        Justo al norte de Tucumán. La Quebrada de Humahuaca, el
+                        Cerro de los Siete Colores en Purmamarca y los viñedos de
+                        altura de Cafayate. Combina de maravilla con la boda.
+                    </p>
+                </article>
+                <article class="place">
+                    <h2>Buenos Aires</h2>
+                    <p>
+                        La capital: tango, los barrios de San Telmo, La Boca y
+                        Recoleta, cafés históricos y una vida nocturna infinita.
+                        Puerta de entrada al país.
+                    </p>
+                </article>
+                <article class="place">
+                    <h2>Cataratas del Iguazú</h2>
+                    <p>
+                        En la frontera con Brasil, uno de los grandes
+                        espectáculos naturales del mundo. Se llega en avión desde
+                        Buenos Aires.
+                    </p>
+                </article>
+                <article class="place">
+                    <h2>Mendoza</h2>
+                    <p>
+                        La tierra del Malbec, a los pies del Aconcagua. Bodegas,
+                        degustaciones y paisajes de viñedo y cordillera.
+                    </p>
+                </article>
+                <article class="place">
+                    <h2>Bariloche y los Lagos</h2>
+                    <p>
+                        En la Patagonia norte: lagos, bosques, montañas y
+                        chocolate. Precioso en cualquier época del año.
+                    </p>
+                </article>
+                <article class="place">
+                    <h2>El Calafate y Ushuaia</h2>
+                    <p>
+                        El sur profundo: el glaciar Perito Moreno y la ciudad más
+                        austral del mundo. Para quien tenga días de sobra y ganas
+                        de aventura.
+                    </p>
+                </article>
+            </div>
+
+            <a href="#top" class="to-top">↑ Volver arriba</a>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .cards-page {
+        min-height: calc(100vh - 80px);
+        padding: 3rem 1.5rem;
+        display: flex;
+        justify-content: center;
+        background: #f8f6f2;
+    }
+
+    .wrapper {
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    .page-head h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3.5rem;
+        margin: 0 0 1rem;
+        color: #222;
+        text-align: center;
+    }
+
+    .lead {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #555;
+        text-align: center;
+        max-width: 720px;
+        margin: 0 auto 2.5rem;
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .place {
+        background: white;
+        border-radius: 18px;
+        padding: 1.75rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .place:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
+    }
+
+    .place h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.35rem;
+        margin: 0 0 0.7rem;
+        color: #333;
+    }
+
+    .place p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.7;
+        color: #555;
+    }
+
+    .to-top {
+        display: inline-block;
+        margin-top: 2.5rem;
+        color: #a98d2a;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .to-top:hover {
+        color: #d4af37;
+    }
+
+    @media (max-width: 768px) {
+        .page-head h1 {
+            font-size: 2.5rem;
+        }
+    }
+</style>

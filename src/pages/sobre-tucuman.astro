@@ -1,0 +1,494 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+// Fotos de los sitios (Wikimedia Commons). Cada archivo se llama igual que el
+// id del sitio; si faltara alguna, la tarjeta muestra el degradado + icono.
+const photos = import.meta.glob("../assets/tucuman/*.{jpg,jpeg,png,webp}", {
+    eager: true,
+    import: "default",
+});
+const photoById = {};
+for (const [path, meta] of Object.entries(photos)) {
+    const id = path.split("/").pop().replace(/\.[^.]+$/, "");
+    photoById[id] = meta;
+}
+
+// Créditos de las imágenes (obligatorio para las licencias CC-BY / CC-BY-SA).
+const imageCredits = [
+    { name: "Casa Histórica", author: "Fulviusbsas", license: "CC BY-SA 3.0", file: "Tucuman-CasaIndependencia2.jpg" },
+    { name: "Cerro San Javier", author: "Yucucu", license: "CC BY-SA 4.0", file: "Parque_San_Javier-Sendero_del_funicular2.jpg" },
+    { name: "Tafí del Valle", author: "Jlazarte", license: "Dominio público", file: "TafidelValle_Tucuman.JPG" },
+    { name: "Ruinas de Quilmes", author: "Cayuqueo", license: "CC BY 3.0", file: "Ruinas_de_quilmes_costado.jpg" },
+    { name: "Dique El Cadillal", author: "Dario Alpern", license: "CC BY-SA 4.0", file: "Embudo_Dique_Celestino_Gelsi.jpg" },
+];
+
+// Sitios que se muestran en las tarjetas y en el mapa. El `id` de cada uno
+// coincide con el id de su tarjeta, para que los puntos del mapa salten a ella.
+const sites = [
+    {
+        id: "casa-historica",
+        name: "Casa Histórica de la Independencia",
+        lat: -26.8306,
+        lng: -65.2039,
+        icon: "🏛️",
+        media: "media-1",
+        text: "En pleno centro de San Miguel de Tucumán. Aquí se declaró la independencia de Argentina el 9 de julio de 1816, y hoy es un museo que se puede visitar. Muy cerca están la Plaza Independencia, la Catedral y la Casa de Gobierno, así que es el punto perfecto para empezar a conocer la ciudad.",
+    },
+    {
+        id: "cerro-san-javier",
+        name: "Cerro San Javier",
+        lat: -26.7842,
+        lng: -65.3628,
+        icon: "⛰️",
+        media: "media-2",
+        text: "A un paso de Yerba Buena, subiendo por una carretera de montaña entre vegetación. Arriba hay miradores con vistas a toda la ciudad, senderos, restaurantes y aire fresco. Es una escapada de media jornada ideal para desconectar sin alejarse.",
+    },
+    {
+        id: "tafi-del-valle",
+        name: "Tafí del Valle",
+        lat: -26.853,
+        lng: -65.708,
+        icon: "🏞️",
+        media: "media-3",
+        text: "Un valle de montaña a unas 2 horas por la espectacular Ruta 307, que sube entre nubes y paisajes de postal. Clima fresco, quesos artesanales, caminatas y mucha calma. De camino podéis parar en el dique La Angostura y ver los menhires de El Mollar.",
+    },
+    {
+        id: "ruinas-quilmes",
+        name: "Ruinas de Quilmes",
+        lat: -26.4806,
+        lng: -66.0397,
+        icon: "🗿",
+        media: "media-4",
+        text: "El asentamiento prehispánico más grande de Argentina, encaramado en la ladera de un cerro en los Valles Calchaquíes. Se puede recorrer y subir para tener una vista impresionante del valle. Combina muy bien con una escapada a Cafayate y sus bodegas.",
+    },
+    {
+        id: "dique-cadillal",
+        name: "Dique El Cadillal",
+        lat: -26.6236,
+        lng: -65.1936,
+        icon: "🌊",
+        media: "media-5",
+        text: "Un embalse a media hora de la ciudad, rodeado de cerros. Ideal para pasar el día junto al agua, comer algo con vistas o practicar deportes náuticos. Una opción fácil y relajada si os sobra una tarde.",
+    },
+];
+
+const tips = [
+    {
+        icon: "🗓️",
+        title: "Cuándo y qué ropa llevar",
+        text: "Marzo es finales del verano: días cálidos (25–30 °C) y noches más frescas. Llevad ropa ligera, pero también algo de abrigo para la noche y, sobre todo, si subís a Tafí del Valle o al Cerro San Javier, donde refresca bastante.",
+    },
+    {
+        icon: "💵",
+        title: "Dinero y pagos",
+        text: "La moneda es el peso argentino y la inflación hace que los precios cambien rápido. Llevad algo de efectivo (euros o dólares) para cambiar y pagad con tarjeta cuando podáis, que suele dar buen tipo de cambio. Aun así, tened siempre algo de efectivo encima: no todos los sitios aceptan tarjeta.",
+    },
+    {
+        icon: "🥟",
+        title: "Gastronomía",
+        text: "No os vayáis sin probar las empanadas tucumanas, de las mejores del país. Probad también el locro, la humita y los vinos del norte (los de Cafayate son excelentes). Comer y beber bien en Tucumán es muy fácil y no demasiado caro.",
+    },
+    {
+        icon: "🚗",
+        title: "Cómo moverse",
+        text: "Dentro de la ciudad hay taxis, remises y apps (Uber, Cabify). Para las excursiones a Tafí, Quilmes o El Cadillal lo más cómodo es alquilar un coche o contratar una excursión, ya que el transporte público llega peor.",
+    },
+    {
+        icon: "💧",
+        title: "Propinas",
+        text: "En restaurantes y cafés se suele dejar alrededor de un 10 % si el servicio ha sido bueno. No es obligatorio, pero está bien visto.",
+    },
+    {
+        icon: "🌐",
+        title: "Idioma y gente",
+        text: "Se habla español y la gente es muy cálida y hospitalaria. Cualquier duda por la calle, no dudéis en preguntar: los tucumanos son de ayudar.",
+    },
+];
+---
+
+<Layout>
+    <main class="tucuman-info" id="top">
+        <div class="wrapper">
+            <header class="page-head">
+                <h1>Sobre Tucumán</h1>
+                <p class="lead">
+                    Unos cuantos consejos prácticos para el viaje y las visitas
+                    que más nos gustan de Tucumán y sus alrededores.
+                </p>
+            </header>
+
+            <!-- SECCIÓN 1 · CONSEJOS -->
+            <section id="consejos" class="section">
+                <h2>Consejos de Tucumán</h2>
+                <p class="section-intro">
+                    Algunas cosas que conviene saber antes de viajar para que
+                    todo sea más fácil.
+                </p>
+                <div class="tips-grid">
+                    {
+                        tips.map((tip) => (
+                            <div class="tip-card">
+                                <span class="tip-icon" aria-hidden="true">
+                                    {tip.icon}
+                                </span>
+                                <div>
+                                    <h3>{tip.title}</h3>
+                                    <p>{tip.text}</p>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2 · QUÉ VER -->
+            <section id="que-ver" class="section">
+                <h2>Qué ver en Tucumán y alrededores</h2>
+                <p class="section-intro">
+                    Estos son los sitios que más recomendamos. Tocad un punto del
+                    mapa para saltar a su ficha.
+                </p>
+
+                <div id="map" class="map"></div>
+                <p class="map-hint">
+                    Mapa orientativo · las ubicaciones son aproximadas.
+                </p>
+
+                <div class="place-cards">
+                    {
+                        sites.map((site) => (
+                            <article id={site.id} class="place-card">
+                                <div class={`card-media ${site.media}`}>
+                                    {photoById[site.id] ? (
+                                        <Image
+                                            src={photoById[site.id]}
+                                            alt={site.name}
+                                            class="card-photo"
+                                            widths={[400, 800]}
+                                            sizes="(max-width: 768px) 100vw, 280px"
+                                        />
+                                    ) : (
+                                        <span aria-hidden="true">{site.icon}</span>
+                                    )}
+                                </div>
+                                <div class="card-body">
+                                    <h3>{site.name}</h3>
+                                    <p>{site.text}</p>
+                                </div>
+                            </article>
+                        ))
+                    }
+                </div>
+
+                <p class="credits">
+                    Fotos vía Wikimedia Commons —
+                    {
+                        imageCredits.map((c, i) => (
+                            <Fragment>
+                                {" "}
+                                <a
+                                    href={`https://commons.wikimedia.org/wiki/File:${c.file}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {c.name}
+                                </a>
+                                {` (${c.author}, ${c.license})`}
+                                {i < imageCredits.length - 1 ? " ·" : "."}
+                            </Fragment>
+                        ))
+                    }
+                </p>
+            </section>
+
+            <a href="#top" class="to-top">↑ Volver arriba</a>
+        </div>
+    </main>
+
+    <!-- Leaflet (mapa interactivo) -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    ></script>
+    <script define:vars={{ sites }}>
+        (function () {
+            if (!window.L || !document.getElementById("map")) return;
+
+            var map = L.map("map", { scrollWheelZoom: false });
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 18,
+                attribution:
+                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            }).addTo(map);
+
+            var markers = [];
+            sites.forEach(function (s) {
+                var m = L.marker([s.lat, s.lng]).addTo(map);
+                m.bindTooltip(s.name, { direction: "top", offset: [0, -10] });
+                m.bindPopup(
+                    '<a href="#' +
+                        s.id +
+                        '" class="map-popup-link">' +
+                        s.name +
+                        " →</a>"
+                );
+                m.on("click", function () {
+                    var el = document.getElementById(s.id);
+                    if (el) {
+                        history.replaceState(null, "", "#" + s.id);
+                        el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                });
+                markers.push(m);
+            });
+
+            map.fitBounds(L.featureGroup(markers).getBounds().pad(0.25));
+        })();
+    </script>
+</Layout>
+
+<style>
+    .tucuman-info {
+        min-height: calc(100vh - 80px);
+        padding: 3rem 1.5rem;
+        display: flex;
+        justify-content: center;
+        background: #f8f6f2;
+    }
+
+    .wrapper {
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    /* Cabecera */
+    .page-head h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3.5rem;
+        margin: 0 0 1rem;
+        color: #222;
+        text-align: center;
+    }
+
+    .lead {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #555;
+        text-align: center;
+        max-width: 720px;
+        margin: 0 auto 3rem;
+    }
+
+    /* Secciones */
+    .section {
+        margin-bottom: 3rem;
+        scroll-margin-top: 100px;
+    }
+
+    .section h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.2rem;
+        margin: 0 0 0.5rem;
+        color: #222;
+    }
+
+    .section-intro {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: #666;
+        margin: 0 0 1.75rem;
+        max-width: 720px;
+    }
+
+    /* Consejos */
+    .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .tip-card {
+        display: flex;
+        gap: 1rem;
+        background: #fff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    }
+
+    .tip-icon {
+        font-size: 1.8rem;
+        line-height: 1;
+        flex-shrink: 0;
+    }
+
+    .tip-card h3 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.2rem;
+        margin: 0 0 0.4rem;
+        color: #333;
+    }
+
+    .tip-card p {
+        margin: 0;
+        font-size: 0.98rem;
+        line-height: 1.65;
+        color: #555;
+    }
+
+    /* Mapa */
+    .map {
+        height: 440px;
+        width: 100%;
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        z-index: 0;
+    }
+
+    .map-hint {
+        margin: 0.75rem 0 2rem;
+        font-size: 0.9rem;
+        color: #999;
+        font-style: italic;
+    }
+
+    .map :global(.map-popup-link) {
+        color: #b8860b;
+        font-weight: 600;
+        text-decoration: none;
+        font-family: "Inter", system-ui, sans-serif;
+    }
+
+    /* Tarjetas horizontales */
+    .place-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .place-card {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        background: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        scroll-margin-top: 100px;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .place-card:target {
+        box-shadow: 0 0 0 3px #d4af37, 0 14px 34px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-media {
+        position: relative;
+        overflow: hidden;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.5rem;
+        color: rgba(255, 255, 255, 0.95);
+    }
+
+    .card-photo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Placeholders con degradado — sustituir por fotos reales cuando las haya */
+    .media-1 {
+        background: linear-gradient(135deg, #c9a227, #8a6d1f);
+    }
+    .media-2 {
+        background: linear-gradient(135deg, #7ba05b, #4f7942);
+    }
+    .media-3 {
+        background: linear-gradient(135deg, #6a99b8, #3f6d8c);
+    }
+    .media-4 {
+        background: linear-gradient(135deg, #c08457, #8a5a3b);
+    }
+    .media-5 {
+        background: linear-gradient(135deg, #5fa8a3, #3a7c78);
+    }
+
+    .card-body {
+        padding: 1.75rem 2rem;
+    }
+
+    .card-body h3 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.5rem;
+        margin: 0 0 0.75rem;
+        color: #333;
+    }
+
+    .card-body p {
+        margin: 0;
+        font-size: 1.02rem;
+        line-height: 1.75;
+        color: #555;
+    }
+
+    /* Créditos de imágenes */
+    .credits {
+        margin: 1.5rem 0 0;
+        font-size: 0.8rem;
+        line-height: 1.7;
+        color: #b0aca4;
+    }
+
+    .credits a {
+        color: #9a968f;
+        text-decoration: underline;
+    }
+
+    .credits a:hover {
+        color: #d4af37;
+    }
+
+    /* Volver arriba */
+    .to-top {
+        display: inline-block;
+        margin-top: 1rem;
+        color: #a98d2a;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .to-top:hover {
+        color: #d4af37;
+    }
+
+    @media (max-width: 768px) {
+        .page-head h1 {
+            font-size: 2.5rem;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+        }
+
+        .place-card {
+            grid-template-columns: 1fr;
+        }
+
+        .card-media {
+            min-height: 150px;
+            font-size: 3rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+</style>
