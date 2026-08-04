@@ -2,27 +2,33 @@
 import Layout from "../layouts/Layout.astro";
 
 // Skyscanner deep-links (route search, no fixed dates → shows the price calendar).
-// Airport codes: MAD = Madrid, ORK = Cork, TUC = Tucumán, EZE = Buenos Aires (Ezeiza).
-const skyscannerMadrid = "https://www.skyscanner.es/transporte/vuelos/mad/tuc/";
-const skyscannerCork = "https://www.skyscanner.es/transporte/vuelos/ork/tuc/";
+// Airport codes: MAD = Madrid, ORK = Cork, BUE = Buenos Aires (todos los
+// aeropuertos), TUC = Tucumán. El viaje se plantea por tramos: primero el
+// vuelo largo hasta Buenos Aires y luego el interno hasta Tucumán.
+const skyscannerMadrid = "https://www.skyscanner.es/transporte/vuelos/mad/bue/";
+const skyscannerCork = "https://www.skyscanner.es/transporte/vuelos/ork/bue/";
+const skyscannerDomestic = "https://www.skyscanner.es/transporte/vuelos/bue/tuc/";
 
 // ─── Widget de precios (Travelpayouts / Aviasales) ────────────────────────────
 // Calendario de precios de vuelos EN EUROS, actualizado en vivo en el navegador
 // de cada visitante. Código generado desde el panel de Travelpayouts
 // (marker 760046, period 2027-03-01, en torno a la fecha de la boda).
-// El widget de Cork es EXACTAMENTE el mismo cambiando solo el origen: MAD → ORK.
-function fareCalendar(origin) {
+// Se reutiliza para cada tramo cambiando origen y destino. Se apunta a Buenos
+// Aires (BUE) en el tramo largo porque es una ruta con muchos más precios en
+// caché que la obscura MAD/ORK → Tucumán directa.
+function fareCalendar(origin, destination) {
     const src =
         "https://tpwgt.com/content?currency=eur&campaign_id=100&promo_id=4041" +
         "&achieve=%2345AD35&light=%23FFFFFF&dark=%23000000&color_background=%23ffffff" +
         "&primary=%230C73FE&range=7%2C26&period=2027-03-01&only_direct=false&one_way=false" +
-        `&destination=TUC&origin=${origin}&powered_by=true&locale=es` +
+        `&destination=${destination}&origin=${origin}&powered_by=true&locale=es` +
         "&searchUrl=www.aviasales.com%2Fsearch&shmarker=760046&trs=558217";
     return `<script async src="${src}" charset="utf-8"><\/script>`;
 }
 
-const madridCalendar = fareCalendar("MAD");
-const corkCalendar = fareCalendar("ORK");
+const madridCalendar = fareCalendar("MAD", "BUE");
+const corkCalendar = fareCalendar("ORK", "BUE");
+const domesticCalendar = fareCalendar("BUE", "TUC");
 ---
 
 <Layout>
@@ -115,10 +121,9 @@ const corkCalendar = fareCalendar("ORK");
                     <p>
                         Hay <strong>vuelos directos a Buenos Aires (Ezeiza)</strong>,
                         de unas 13 horas, con <strong>Aerolíneas Argentinas,
-                        Iberia</strong> y <strong>Air Europa</strong>. Desde
-                        Buenos Aires, el tramo interno a Tucumán (aprox. 2 h) lo
-                        cubren <strong>Aerolíneas Argentinas, JetSmart</strong> y
-                        <strong>Flybondi</strong>.
+                        Iberia</strong> y <strong>Air Europa</strong>. Este es el
+                        tramo largo; el vuelo interno hasta Tucumán lo vemos más
+                        abajo.
                     </p>
                     <a
                         class="fare-btn"
@@ -126,7 +131,7 @@ const corkCalendar = fareCalendar("ORK");
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Buscar precios Madrid → Tucumán en Skyscanner
+                        Buscar precios Madrid → Buenos Aires en Skyscanner
                     </a>
 
                     <div class="price-widget">
@@ -136,13 +141,17 @@ const corkCalendar = fareCalendar("ORK");
                             ) : (
                                 <p class="widget-placeholder">
                                     📊 Aquí aparecerá el <strong>calendario de
-                                    precios en euros</strong> (Madrid → Tucumán),
-                                    actualizado en vivo, en cuanto se configure el
-                                    widget de Travelpayouts.
+                                    precios en euros</strong> (Madrid → Buenos
+                                    Aires), actualizado en vivo, en cuanto se
+                                    configure el widget de Travelpayouts.
                                 </p>
                             )
                         }
                     </div>
+                    <p class="widget-caption">
+                        Precios orientativos del tramo largo Madrid → Buenos
+                        Aires.
+                    </p>
 
                     <div class="recommendation">
                         <h3>Nuestra recomendación: Aerolíneas Argentinas</h3>
@@ -188,18 +197,13 @@ const corkCalendar = fareCalendar("ORK");
                             Fráncfort.
                         </li>
                     </ul>
-                    <p>
-                        Ya en Buenos Aires, el tramo interno a Tucumán es el
-                        mismo que desde Madrid (Aerolíneas Argentinas, JetSmart o
-                        Flybondi).
-                    </p>
                     <a
                         class="fare-btn"
                         href={skyscannerCork}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Buscar precios Cork → Tucumán en Skyscanner
+                        Buscar precios Cork → Buenos Aires en Skyscanner
                     </a>
 
                     <div class="price-widget">
@@ -209,13 +213,17 @@ const corkCalendar = fareCalendar("ORK");
                             ) : (
                                 <p class="widget-placeholder">
                                     📊 Aquí aparecerá el <strong>calendario de
-                                    precios en euros</strong> (Cork → Tucumán),
-                                    actualizado en vivo, en cuanto se configure el
-                                    widget de Travelpayouts.
+                                    precios en euros</strong> (Cork → Buenos
+                                    Aires), actualizado en vivo, en cuanto se
+                                    configure el widget de Travelpayouts.
                                 </p>
                             )
                         }
                     </div>
+                    <p class="widget-caption">
+                        Precios orientativos hasta Buenos Aires. Al ser una ruta
+                        con conexión, algunos días pueden aparecer sin precio.
+                    </p>
 
                     <div class="recommendation">
                         <h3>Nuestra recomendación: Aerolíneas Argentinas</h3>
@@ -235,6 +243,45 @@ const corkCalendar = fareCalendar("ORK");
                             Ir a Aerolíneas Argentinas
                         </a>
                     </div>
+                </div>
+
+                <div class="subsection">
+                    <h2>✈️ Buenos Aires → Tucumán (tramo interno)</h2>
+                    <p>
+                        Ya en Buenos Aires queda el último salto hasta Tucumán
+                        (aprox. 2 h), que cubren <strong>Aerolíneas Argentinas,
+                        JetSmart</strong> y <strong>Flybondi</strong>, y suele
+                        ser económico. La mayoría de estos vuelos salen del
+                        <em>Aeroparque (AEP)</em>, en el centro, así que tened en
+                        cuenta el traslado desde Ezeiza que comentamos arriba.
+                    </p>
+                    <a
+                        class="fare-btn"
+                        href={skyscannerDomestic}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Buscar precios Buenos Aires → Tucumán en Skyscanner
+                    </a>
+
+                    <div class="price-widget">
+                        {
+                            domesticCalendar ? (
+                                <Fragment set:html={domesticCalendar} />
+                            ) : (
+                                <p class="widget-placeholder">
+                                    📊 Aquí aparecerá el <strong>calendario de
+                                    precios en euros</strong> (Buenos Aires →
+                                    Tucumán), actualizado en vivo, en cuanto se
+                                    configure el widget de Travelpayouts.
+                                </p>
+                            )
+                        }
+                    </div>
+                    <p class="widget-caption">
+                        Precios orientativos del vuelo interno Buenos Aires →
+                        Tucumán.
+                    </p>
                 </div>
 
                 <p class="note">
@@ -371,6 +418,14 @@ const corkCalendar = fareCalendar("ORK");
     /* Widget de precios */
     .price-widget {
         margin-top: 1.25rem;
+    }
+
+    .widget-caption {
+        margin: 0.6rem 0 0;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: #999;
+        font-style: italic;
     }
 
     .widget-placeholder {
